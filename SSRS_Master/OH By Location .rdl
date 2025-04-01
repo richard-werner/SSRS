@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily">
+  <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="RUGS_IMS">
+      <DataSourceReference>RUGS_IMS</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>4553e608-3c35-42aa-b5f5-fcaf1f2a42bd</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="Param_Facility">
+      <Query>
+        <DataSourceName>RUGS_IMS</DataSourceName>
+        <CommandText>select distinct warehouse FROM RUGS_IMS.dbo.tb_AR_coreinv_OH
+order by warehouse asc;</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="warehouse">
+          <DataField>warehouse</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="EmailTo">
+      <Query>
+        <DataSourceName>RUGS_IMS</DataSourceName>
+        <CommandText>select distinct email_address from RUGS_IMS.dbo.tb_AR_wh_contacts
+order by email_address asc;</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="email_address">
+          <DataField>email_address</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="sp_AR_Core_OH">
+      <Query>
+        <DataSourceName>RUGS_IMS</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@emailTO">
+            <Value>=Parameters!EmailTO.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@warehouse">
+            <Value>=Parameters!Warehouse.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>sp_AR_Core_OH</CommandText>
+      </Query>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Textbox Name="Textbox11">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Check Your Inbox</Value>
+                    <Style>
+                      <FontSize>20pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>LimeGreen</Color>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox11</rd:DefaultName>
+            <Top>0.15in</Top>
+            <Left>0.19896in</Left>
+            <Height>0.41667in</Height>
+            <Width>2.80208in</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+        </ReportItems>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <LeftMargin>1in</LeftMargin>
+        <RightMargin>1in</RightMargin>
+        <TopMargin>1in</TopMargin>
+        <BottomMargin>1in</BottomMargin>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="Warehouse">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>Param_Facility</DataSetName>
+          <ValueField>warehouse</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Warehouse</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Param_Facility</DataSetName>
+          <ValueField>warehouse</ValueField>
+          <LabelField>warehouse</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+    <ReportParameter Name="EmailTO">
+      <DataType>String</DataType>
+      <Prompt>Email To</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>EmailTo</DataSetName>
+          <ValueField>email_address</ValueField>
+          <LabelField>email_address</LabelField>
+        </DataSetReference>
+      </ValidValues>
+    </ReportParameter>
+  </ReportParameters>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>Warehouse</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>EmailTO</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>e831782b-cea9-44d4-9939-1b91449de74c</rd:ReportID>
+</Report>
